@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Jewelry Store</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#6c5ce7;
+  --secondary:#00cec9;
+  --gold:#f9ca24;
+  --rose:#fd79a8;
+  --dark:#2d3436;
+  --glass:rgba(255,255,255,0.85);
+}
+
+body{
+  margin:0;
+  padding:20px;
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(135deg,#fff1f8,#e0e7ff);
+}
+
+h1{
+  text-align:center;
+  font-family:Cinzel,serif;
+  font-size:3rem;
+  background:linear-gradient(90deg,var(--gold),var(--primary),var(--rose));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.cart-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:14px 26px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--primary),var(--rose));
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  z-index:1000;
+}
+
+.filters{
+  max-width:1100px;
+  margin:2rem auto;
+  background:var(--glass);
+  padding:1.5rem;
+  border-radius:20px;
+  display:flex;
+  gap:20px;
+  justify-content:space-between;
+  backdrop-filter:blur(10px);
+}
+
+.filters input{
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid #ccc;
+}
+
+.product-list{
+  max-width:1100px;
+  margin:3rem auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:2rem;
+}
+
+.product{
+  background:white;
+  border-radius:24px;
+  padding:1rem;
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+  transition:.3s;
+  position:relative;
+}
+
+.product:hover{
+  transform:translateY(-10px) scale(1.02);
+}
+
+.product img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:18px;
+}
+
+.product h3{
+  margin:12px 0 5px;
+  font-family:Playfair Display,serif;
+  color:var(--primary);
+}
+
+.product p{
+  font-weight:600;
+}
+
+.btn{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn.remove{
+  background:linear-gradient(135deg,#ff7675,#d63031);
+}
+
+/* Cart Modal */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+
+.modal-content{
+  background:white;
+  padding:2rem;
+  border-radius:20px;
+  width:320px;
+  max-height:80vh;
+  overflow:auto;
+}
+
+.modal h2{
+  text-align:center;
+  margin-bottom:1rem;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<button class="cart-btn" id="openCart">🛒 Cart (<span id="cart-count">0</span>)</button>
+
+<h1>💎 Jewelry Collection</h1>
+
+<div class="filters">
+  <input type="text" id="search" placeholder="Search jewelry...">
+  <div>
+    Max Price ₹<span id="price-value">70000</span><br>
+    <input type="range" id="price" min="0" max="70000" value="70000">
+  </div>
+</div>
+
+<div class="product-list" id="product-list"></div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="modal-content">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <button class="btn remove" onclick="closeCart()">Close</button>
+  </div>
+</div>
+
+<script>
+const products=[
+ {name:"Diamond Ring",price:45000,img:"images/diamond ring.jpg"},
+ {name:"Gold Necklace",price:62000,img:"images/image-2.jpg"},
+ {name:"Pearl Earrings",price:18000,img:"images/image-3.jpg"},
+ {name:"Silver Bracelet",price:22000,img:"images/image-4.jpg"},
+ {name:"Emerald Pendant",price:52000,img:"images/necklace.jpg"},
+ {name:"Rose Gold Ring",price:35000,img:"images/image-5.jpg"}
+];
+
+const list=document.getElementById("product-list");
+const price=document.getElementById("price");
+const priceVal=document.getElementById("price-value");
+const search=document.getElementById("search");
+const cartCount=document.getElementById("cart-count");
+const cartItems=document.getElementById("cart-items");
+const modal=document.getElementById("cartModal");
+
+let cart=[];
+
+function render(){
+  list.innerHTML="";
+  products
+  .filter(p=>p.price<=price.value && p.name.toLowerCase().includes(search.value.toLowerCase()))
+  .forEach(p=>{
+    const card=document.createElement("div");
+    card.className="product";
+
+    const inCart=cart.some(i=>i.name===p.name);
+
+    card.innerHTML=`
+      <img src="${p.img}">
+      <h3>${p.name}</h3>
+      <p>₹${p.price}</p>
+      <button class="btn ${inCart?"remove":""}">
+        ${inCart?"Remove from Cart":"Add to Cart"}
+      </button>
+    `;
+
+    const btn=card.querySelector(".btn");
+    btn.onclick=()=>{
+      if(inCart){
+        cart=cart.filter(i=>i.name!==p.name);
+      }else{
+        cart.push(p);
+      }
+      updateCart();
+      render();
+    };
+
+    list.appendChild(card);
+  });
+}
+
+function updateCart(){
+  cartCount.textContent=cart.length;
+  cartItems.innerHTML="";
+  if(!cart.length){
+    cartItems.innerHTML="<p>Cart is empty</p>";
+    return;
+  }
+  cart.forEach(i=>{
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`${i.name} <strong>₹${i.price}</strong>`;
+    cartItems.appendChild(div);
+  });
+}
+
+function closeCart(){
+  modal.style.display="none";
+}
+
+document.getElementById("openCart").onclick=()=>{
+  modal.style.display="flex";
+};
+
+price.oninput=()=>{
+  priceVal.textContent=price.value;
+  render();
+};
+
+search.oninput=render;
+
+render();
+</script>
+
+</body>
+</html>

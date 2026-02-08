@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notes</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      opacity: 0.55;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen px-4 py-6
+  bg-gradient-to-br from-[#6c5ce7] via-[#a29bfe] to-[#fd79a8]">
+
+  <!-- HEADER -->
+  <header class="mb-8 text-center">
+    <h1 class="text-4xl font-bold text-white drop-shadow-lg">
+      📝 My Notes
+    </h1>
+    <p class="text-white/80 mt-2">
+      Capture thoughts, ideas & reminders ✨
+    </p>
+  </header>
+
+  <!-- ADD NOTE SECTION -->
+  <section class="mb-8 grid grid-cols-1">
+    <div class="bg-white/80 backdrop-blur-xl p-5 rounded-2xl shadow-2xl max-w-3xl mx-auto w-full">
+
+      <input
+        type="text"
+        id="title"
+        placeholder="Note title"
+        class="w-full mb-3 p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 outline-none"
+      />
+
+      <textarea
+        id="content"
+        placeholder="Write your note here..."
+        rows="4"
+        class="w-full p-3 rounded-xl border border-gray-200 resize-none focus:ring-2 focus:ring-pink-400 outline-none"
+      ></textarea>
+
+      <div class="flex items-center justify-between mt-4">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Color</span>
+          <input type="color" id="colorPicker" class="w-8 h-8 rounded-full border cursor-pointer" />
+        </div>
+
+        <button
+          onclick="addNote()"
+          class="px-6 py-2 rounded-full text-white font-semibold
+          bg-gradient-to-r from-[#6c5ce7] to-[#fd79a8]
+          shadow-lg hover:scale-105 transition">
+          Add Note ➕
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES GRID -->
+  <section
+    id="notes"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+  </section>
+
+  <!-- SCRIPT -->
+  <script>
+    const notesContainer = document.getElementById('notes');
+
+    function loadNotes() {
+      const notes = JSON.parse(localStorage.getItem('teeshaNotes') || '[]');
+      displayNotes(notes);
+    }
+
+    function addNote() {
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const color = document.getElementById('colorPicker').value;
+
+      if (!content) return;
+
+      const notes = JSON.parse(localStorage.getItem('teeshaNotes') || '[]');
+      notes.push({ title, content, color, done: false });
+
+      localStorage.setItem('teeshaNotes', JSON.stringify(notes));
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      loadNotes();
+    }
+
+    function toggleDone(index) {
+      const notes = JSON.parse(localStorage.getItem('teeshaNotes'));
+      notes[index].done = !notes[index].done;
+      localStorage.setItem('teeshaNotes', JSON.stringify(notes));
+      loadNotes();
+    }
+
+    function deleteNote(index) {
+      const notes = JSON.parse(localStorage.getItem('teeshaNotes'));
+      notes.splice(index, 1);
+      localStorage.setItem('teeshaNotes', JSON.stringify(notes));
+      loadNotes();
+    }
+
+    function displayNotes(notes) {
+      notesContainer.innerHTML = '';
+
+      notes.forEach((note, index) => {
+        const noteDiv = document.createElement('div');
+
+        noteDiv.className = `
+          rounded-2xl shadow-xl p-4 relative
+          transition transform hover:-translate-y-2 hover:shadow-2xl
+        `;
+
+        noteDiv.style.background = `
+          linear-gradient(135deg, ${note.color}, #ffffff)
+        `;
+
+        noteDiv.innerHTML = `
+          <h2 class="font-bold text-lg mb-1 ${note.done ? 'completed' : ''}">
+            ${note.title || 'Untitled'}
+          </h2>
+
+          <p class="text-sm ${note.done ? 'completed' : ''}">
+            ${note.content}
+          </p>
+
+          <div class="flex justify-between mt-4">
+            <button
+              onclick="toggleDone(${index})"
+              class="text-xs px-4 py-1 rounded-full text-white
+              ${note.done ? 'bg-yellow-500' : 'bg-green-600'}
+              hover:opacity-90 transition">
+              ${note.done ? 'Undo' : 'Done'}
+            </button>
+
+            <button
+              onclick="deleteNote(${index})"
+              class="text-xs px-4 py-1 rounded-full bg-red-500 text-white hover:opacity-90 transition">
+              Delete
+            </button>
+          </div>
+        `;
+
+        notesContainer.appendChild(noteDiv);
+      });
+    }
+
+    loadNotes();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valencia's Projects</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Page-specific styling -->
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #fdfbff, #eef1ff, #f7f3ff);
+    }
+
+    .projects-hero {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.8s ease;
+    }
+
+    .projects-hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      background: linear-gradient(90deg, #6c5ce7, #00cec9, #fd79a8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .projects-hero p {
+      font-family: 'Outfit', sans-serif;
+      max-width: 600px;
+      margin: 0.8rem auto 0;
+      color: #555;
+      font-size: 1.05rem;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      animation: fadeUp 1s ease;
+    }
+
+    .project-card {
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.9),
+        rgba(255,255,255,0.65)
+      );
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      padding: 1.8rem;
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 20px 40px rgba(108,92,231,0.2);
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(108,92,231,0.12), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 30px 60px rgba(108,92,231,0.35);
+    }
+
+    .project-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
+      color: #6c5ce7;
+    }
+
+    .project-card p {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .project-card a {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: #fd79a8;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .project-card a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #fd79a8, #6c5ce7);
+      transition: width 0.3s ease;
+    }
+
+    .project-card a:hover::after {
+      width: 100%;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="notes.html">Notes</a></li>
+      <li><a href="products.html">Product</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="projects-hero">
+      <h1>Things I’ve Built 🚀</h1>
+      <p>
+        A curated collection of projects where ideas meet clean design,
+        logic, and real-world problem solving.
+      </p>
+    </section>
+
+    <!-- PROJECT GRID -->
+    <section class="project-grid" id="project-grid">
+      <!-- Cards injected from script.js -->
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

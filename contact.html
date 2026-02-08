@@ -1,0 +1,212 @@
+<!-- contact.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Valencia</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+  <!-- Google Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Page-specific styling -->
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #fdfbff, #eef1ff, #fef6ff);
+    }
+
+    .contact-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      background: linear-gradient(90deg, #6c5ce7, #00cec9, #fd79a8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .contact-hero p {
+      font-family: 'Outfit', sans-serif;
+      color: #555;
+      max-width: 520px;
+      margin: 0.8rem auto 0;
+      font-size: 1.05rem;
+    }
+
+    .contact-card {
+      max-width: 580px;
+      margin: auto;
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.85),
+        rgba(255,255,255,0.65)
+      );
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      padding: 2.5rem;
+      box-shadow:
+        0 25px 50px rgba(108, 92, 231, 0.25),
+        inset 0 0 0 1px rgba(255,255,255,0.5);
+      animation: floatIn 0.8s ease;
+    }
+
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.6rem;
+    }
+
+    .input-group span {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      color: #6c5ce7;
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(108,92,231,0.25);
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.9);
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: #fd79a8;
+      box-shadow: 0 0 0 4px rgba(253,121,168,0.25);
+      background: #fff;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 0.5rem;
+      background: linear-gradient(135deg, #fd79a8, #6c5ce7, #00cec9);
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      border-radius: 16px;
+      font-size: 1.05rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      box-shadow: 0 15px 30px rgba(108,92,231,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(108,92,231,0.55);
+    }
+
+    #form-status {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: #6c5ce7;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #form-status.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav>
+    <ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="notes.html">Notes</a></li>
+      <li><a href="products.html">Product</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <!-- HERO -->
+    <div class="contact-hero">
+      <h1>Let’s Connect ✨</h1>
+      <p>
+        Have an idea, opportunity, or just want to say hello?  
+        I’m always excited to connect and collaborate 💌
+      </p>
+    </div>
+
+    <!-- CONTACT CARD -->
+    <div class="contact-card">
+      <form id="contact-form">
+
+        <div class="input-group">
+          <span class="material-icons">person</span>
+          <input type="text" placeholder="Your Name" required>
+        </div>
+
+        <div class="input-group">
+          <span class="material-icons">email</span>
+          <input type="email" placeholder="Your Email" required>
+        </div>
+
+        <div class="input-group">
+          <span class="material-icons">chat</span>
+          <textarea rows="5" placeholder="Your Message" required></textarea>
+        </div>
+
+        <button type="submit">Send Message 🚀</button>
+      </form>
+
+      <p id="form-status">✨ Your message has been sent successfully!</p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      status.classList.add('show');
+      form.reset();
+
+      setTimeout(() => {
+        status.classList.remove('show');
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
